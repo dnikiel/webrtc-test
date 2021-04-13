@@ -8,6 +8,7 @@ let recordedBlobs;
 const errorMsgElement = document.querySelector("span#errorMsg");
 const recordedVideo = document.querySelector("video#recorded");
 const recordButton = document.querySelector("button#record");
+
 recordButton.addEventListener("click", () => {
   if (recordButton.textContent === "Start Recording") {
     startRecording();
@@ -20,6 +21,7 @@ recordButton.addEventListener("click", () => {
 });
 
 const playButton = document.querySelector("button#play");
+
 playButton.addEventListener("click", () => {
   const superBuffer = new Blob(recordedBlobs, { type: "video/webm" });
   recordedVideo.src = null;
@@ -30,6 +32,7 @@ playButton.addEventListener("click", () => {
 });
 
 const downloadButton = document.querySelector("button#download");
+
 downloadButton.addEventListener("click", () => {
   const blob = new Blob(recordedBlobs, { type: "video/webm" });
   const url = window.URL.createObjectURL(blob);
@@ -54,19 +57,7 @@ function handleDataAvailable(event) {
 
 function startRecording() {
   recordedBlobs = [];
-  let options = { mimeType: "video/webm;codecs=vp9,opus" };
-  if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-    console.error(`${options.mimeType} is not supported`);
-    options = { mimeType: "video/webm;codecs=vp8,opus" };
-    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      console.error(`${options.mimeType} is not supported`);
-      options = { mimeType: "video/webm" };
-      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.error(`${options.mimeType} is not supported`);
-        options = { mimeType: "" };
-      }
-    }
-  }
+  let options = {};
 
   try {
     mediaRecorder = new MediaRecorder(window.stream, options);
